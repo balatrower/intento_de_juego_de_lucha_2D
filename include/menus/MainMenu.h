@@ -4,16 +4,15 @@
 
 #ifndef JUEGOPEGARSE2D_MAINMENU_H
 #define JUEGOPEGARSE2D_MAINMENU_H
-#include <string>
 
 class MainMenu {
 public:
     MainMenu();
-    std::vector<sf::String> getOptions();
+    std::vector<std::string> getOptions();
     void setOptions(std::vector<std::string> options);
     void addOption(std::string);
 private:
-    std::vector<sf::String> options;
+    std::vector<std::string> options;
 };
 
 #endif //JUEGOPEGARSE2D_MAINMENU_H

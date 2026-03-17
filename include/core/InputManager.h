@@ -10,8 +10,11 @@
 class InputManager {
 public:
     InputManager();
+    void checkForInputs();
+    void executeInputs();
 private:
-
+    std::vector<sf::Keyboard::Key> m_inputKeyList;
+    void addKey(sf::Keyboard::Key);
 };
 
 #endif //JUEGOPEGARSE2D_INPUTMANAGER_H

@@ -3,6 +3,8 @@
 //
 
 #include "core/Game.h"
+
+#include "core/InputManager.h"
 #include "entities/Player.h"
 #include "SFML/System/Clock.hpp"
 #include "menus/MainMenu.h"
@@ -18,6 +20,8 @@ void Game::Run() {
     // main menu
     MainMenu menu = MainMenu();
 
+    // input manager
+    InputManager inputManger = InputManager();
 
     while (window.isOpen()) {
         // 0. get delta time as sf::Time, convert it and restart the clock for next frame
@@ -31,9 +35,7 @@ void Game::Run() {
         }
 
         // 1. Check for input
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
-
-        }
+        inputManger.checkForInputs();
 
         // 2. update physics and logic
 
