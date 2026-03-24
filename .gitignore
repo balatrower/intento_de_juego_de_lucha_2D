@@ -1,4 +1,6 @@
-.idea
-build
-release
+.idea/
+build/
+release/
+cmake-build-*/
+out/
 **/_deps/
