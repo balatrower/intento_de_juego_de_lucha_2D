@@ -3,11 +3,8 @@
 //
 
 #include "core/Game.h"
-
 #include "core/InputManager.h"
-#include "entities/Player.h"
 #include "SFML/System/Clock.hpp"
-#include "menus/MainMenu.h"
 #include "SFML/Graphics/RenderWindow.hpp"
 
 void Game::Run() {
@@ -17,9 +14,6 @@ void Game::Run() {
     sf::Clock clock; // to measure delta time
     window.setFramerateLimit(60); // limit fps
 
-    // main menu
-    MainMenu menu = MainMenu();
-
     // input manager
     InputManager inputManger = InputManager();
 
@@ -28,20 +22,39 @@ void Game::Run() {
         sf::Time dt = clock.restart();
         float deltaTime = dt.asMilliseconds();
 
-        // 0.5 handle window events (close and stuff)
+        // 0.5 handle window close event if game is windowed
         while (const std::optional event = window.pollEvent()) {
             if (event->is<sf::Event::Closed>())
             window.close();
         }
 
+
         // 1. Check for input
-        inputManger.checkForInputs();
+        switch (m_gameState) {
+            case GameState::MainMenu:
+                inputManger.checkForMenuInput();
+                break;
 
-        // 2. update physics and logic
+            case GameState::InGame:
+                inputManger.checkForInGameInput();
+                break;
+
+            case GameState::Paused:
+                inputManger.checkForMenuInput();
+                break;
+        }
 
 
-        // 3. update the screen
+        // 2. update physics, logic and menus
+            // here will be the switch with the updater for each game state
 
-
+        // 3. render the updated info on the screen
+        window.clear();
+        // here will be the switch with the renderer for each game state
+        window.display();
     }
+}
+
+void Game::setGameState(const GameState& gameState) {
+    m_gameState = gameState;
 }

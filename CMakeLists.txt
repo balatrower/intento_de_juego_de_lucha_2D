@@ -29,7 +29,8 @@ add_executable(
         include/entities/Player.h
         include/core/InputManager.h
         src/core/InputManager.cpp
-        src/menus/MainMenu.cpp
+        src/states/MainMenu.cpp
+        include/states/MainMenu.h
 )
 
 # cambiar el path de los include en la carpeta include para los header files

@@ -4,17 +4,20 @@
 
 #ifndef JUEGOPEGARSE2D_INPUTMANAGER_H
 #define JUEGOPEGARSE2D_INPUTMANAGER_H
-#include "entities/Player.h"
+#include <list>
+#include <vector>
+
 #include "SFML/Window/Keyboard.hpp"
 
 class InputManager {
 public:
     InputManager();
-    void checkForInputs();
+    void checkForInGameInputs();
+    void checkForMenuInputs();
     void executeInputs();
 private:
-    std::vector<sf::Keyboard::Key> m_inputKeyList;
-    void addKey(sf::Keyboard::Key);
+    std::pmr::vector<sf::Keyboard::Key> m_inputKeyList;
+    void addKey(sf::Keyboard::Key key);
 };
 
 #endif //JUEGOPEGARSE2D_INPUTMANAGER_H
