@@ -4,21 +4,26 @@
 
 #ifndef JUEGOPEGARSE2D_GAME_H
 #define JUEGOPEGARSE2D_GAME_H
+
 #include <SFML/Graphics.hpp>
+#include "menus/Menu.h"
 
 class Game {
     enum class GameState {
-        MainMenu,
-        InGame,
-        Paused
+        InMenu,
+        InMatch,
+        Count
     };
 
 public:
     void Run();
     void setGameState(const GameState& gameState);
+    void changeMenu(std::unique_ptr<Menu> newMenu);
+    void updateMatch(float dt);
 private:
     sf::RenderWindow m_window;
-    GameState m_gameState = GameState::MainMenu;
+    GameState m_gameState = GameState::InMenu;
+    std::unique_ptr<Menu> m_currentMenu; // ptr to the menu so i dont need to worry about memory management cos it erases it when not in use.
 };
 
 #endif //JUEGOPEGARSE2D_GAME_H

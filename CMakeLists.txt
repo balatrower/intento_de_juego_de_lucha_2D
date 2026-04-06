@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 #decir a el ejecutable va a la carpeta build
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../build)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY build)
 
 #todo para que cmpile la libreria externa de SFML la primera vez que corre
 include(FetchContent)
@@ -29,8 +29,13 @@ add_executable(
         include/entities/Player.h
         include/core/InputManager.h
         src/core/InputManager.cpp
-        src/states/MainMenu.cpp
-        include/states/MainMenu.h
+        src/menus/MainMenu.cpp
+        include/menus/MainMenu.h
+        include/menus/Menu.h
+        include/menus/ModeSelectMenu.h
+        src/menus/ModeSelectMenu.cpp
+        include/menus/SettingsMenu.h
+        src/menus/SettingsMenu.cpp
 )
 
 # cambiar el path de los include en la carpeta include para los header files
