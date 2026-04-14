@@ -5,9 +5,6 @@ project(juegoPegarse2D)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-#decir a el ejecutable va a la carpeta build
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY build)
-
 #todo para que cmpile la libreria externa de SFML la primera vez que corre
 include(FetchContent)
 

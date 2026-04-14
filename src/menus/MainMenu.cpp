@@ -16,7 +16,7 @@ MainMenu::MainMenu() {
 }
 
 std::unique_ptr<Menu> MainMenu::updateMenu(InputManager& inputManager, bool& userWantsExit) {
-    while (inputManager.isMenuActionQueueEmpty()) {
+    while (!inputManager.isMenuActionQueueEmpty()) {
         MenuAction currentAction = inputManager.extractFirstElementOfMenuQueue();
 
         switch (currentAction) {
@@ -24,6 +24,8 @@ std::unique_ptr<Menu> MainMenu::updateMenu(InputManager& inputManager, bool& use
                 int newOptionInt = static_cast<int>(m_currentOption) - 1;
                 if (isNewOptionIsOutOfBounds(newOptionInt)) {
                     m_currentOption = MainMenuOptions::Exit;
+                } else {
+                    m_currentOption = (MainMenuOptions)newOptionInt;
                 }
                 break;
             }
@@ -32,6 +34,8 @@ std::unique_ptr<Menu> MainMenu::updateMenu(InputManager& inputManager, bool& use
                 int newOptionInt = static_cast<int>(m_currentOption) + 1;
                 if (isNewOptionIsOutOfBounds(newOptionInt)) {
                     m_currentOption = MainMenuOptions::Play;
+                } else {
+                    m_currentOption = (MainMenuOptions)newOptionInt;
                 }
                 break;
             }
@@ -46,13 +50,11 @@ std::unique_ptr<Menu> MainMenu::updateMenu(InputManager& inputManager, bool& use
                     case MainMenuOptions::Play: {
                         std::unique_ptr<Menu> newMenu = std::make_unique<ModeSelectMenu>();
                         return std::move(newMenu);
-                        break;
                     }
 
                     case MainMenuOptions::Settings: {
                         std::unique_ptr<Menu> newMenu = std::make_unique<SettingsMenu>();
                         return std::move(newMenu);
-                        break;
                     }
 
                     case MainMenuOptions::Exit: {
@@ -64,8 +66,8 @@ std::unique_ptr<Menu> MainMenu::updateMenu(InputManager& inputManager, bool& use
         }
     }
 
-    return std::make_unique<MainMenu>(); // needed cos it needs the same type of menu for it to not change, if i used a nullptr or smth it will try to load a null menu
-}
+    return nullptr; 
+    }
 
 MenuType MainMenu::getMenuType() {
     return MenuType::MainMenu;
@@ -73,14 +75,21 @@ MenuType MainMenu::getMenuType() {
 
 void MainMenu::drawMenu(sf::RenderWindow& window) {
     sf::Text text(m_font);
+    sf::Vector2f textMenuPos = {0.0, 0.0};
+    for (int i = 0; i < (int)MainMenuOptions::Count; i++) {
+        text.setString(menuOptionToString((MainMenuOptions)i));
+        text.setCharacterSize(24);
+        if ((int)m_currentOption == i) {
+            text.setFillColor(sf::Color::Yellow);
+        } else {
+            text.setFillColor(sf::Color::White);
+        }
+        text.move(textMenuPos);
+        window.draw(text);
+    }
 
-    text.setString(menuOptionToString(m_currentOption));
 
-    text.setCharacterSize(24);
 
-    text.setFillColor(sf::Color::White);
-
-    window.draw(text);
 }
 
 std::string MainMenu::menuOptionToString(MainMenuOptions menuOption) {
@@ -93,8 +102,8 @@ std::string MainMenu::menuOptionToString(MainMenuOptions menuOption) {
 }
 
 void MainMenu::loadFont() {
-    if (m_font.openFromFile("fonts/Freedom.ttf")) {
-        std::cout << "FONT COULD NOT BE LOADED, REDIRECT THIS CONSOLE ERROR TO A LOG YOU LAZY IDIOT";
+    if (!m_font.openFromFile("fonts/Freedom.ttf")) {
+        std::cout << "FONT COULD NOT BE LOADED, REDIRECT THIS CONSOLE ERROR TO A LOG YOU LAZY IDIOT" << "\n";
     }
 }
 

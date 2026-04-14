@@ -17,5 +17,5 @@ void SettingsMenu::drawMenu(sf::RenderWindow& window) {
 }
 
 MenuType SettingsMenu::getMenuType() {
-    return MenuType::ModeSelectMenu;
+    return MenuType::SettingsMenu;
 }
