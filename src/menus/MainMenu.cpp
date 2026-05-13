@@ -10,6 +10,7 @@
 #include "SFML/Graphics/Text.hpp"
 #include "menus/ModeSelectMenu.h"
 #include "menus/SettingsMenu.h"
+#include "SFML/Graphics/Sprite.hpp"
 
 MainMenu::MainMenu() {
     loadFont();
@@ -22,7 +23,7 @@ std::unique_ptr<Menu> MainMenu::updateMenu(InputManager& inputManager, bool& use
         switch (currentAction) {
             case MenuAction::Up: {
                 int newOptionInt = static_cast<int>(m_currentOption) - 1;
-                if (isNewOptionIsOutOfBounds(newOptionInt)) {
+                if (isNewOptionOutOfBounds(newOptionInt)) {
                     m_currentOption = MainMenuOptions::Exit;
                 } else {
                     m_currentOption = (MainMenuOptions)newOptionInt;
@@ -32,7 +33,7 @@ std::unique_ptr<Menu> MainMenu::updateMenu(InputManager& inputManager, bool& use
 
             case MenuAction::Down: {
                 int newOptionInt = static_cast<int>(m_currentOption) + 1;
-                if (isNewOptionIsOutOfBounds(newOptionInt)) {
+                if (isNewOptionOutOfBounds(newOptionInt)) {
                     m_currentOption = MainMenuOptions::Play;
                 } else {
                     m_currentOption = (MainMenuOptions)newOptionInt;
@@ -67,15 +68,22 @@ std::unique_ptr<Menu> MainMenu::updateMenu(InputManager& inputManager, bool& use
     }
 
     return nullptr; 
-    }
+}
 
 MenuType MainMenu::getMenuType() {
     return MenuType::MainMenu;
 }
 
 void MainMenu::drawMenu(sf::RenderWindow& window) {
+    sf::Texture menuBackground = sf::Texture("assets/bgMainMenu.jpg");
+    menuBackground.setSmooth(true);
+    sf::Sprite sprMenuBackground = sf::Sprite(menuBackground);
+    sprMenuBackground.setScale({(float) window.getSize().x / menuBackground.getSize().x, (float) window.getSize().y / menuBackground.getSize().y});
+    window.draw(sprMenuBackground);
+
     sf::Text text(m_font);
-    sf::Vector2f textMenuPos = {0.0, 0.0};
+    text.setPosition({((float) window.getSize().x / 2), ((float) window.getSize().y / 2) - 100});
+    sf::Vector2f menuOptionOffset = {0.0, 100.0};
     for (int i = 0; i < (int)MainMenuOptions::Count; i++) {
         text.setString(menuOptionToString((MainMenuOptions)i));
         text.setCharacterSize(24);
@@ -84,12 +92,9 @@ void MainMenu::drawMenu(sf::RenderWindow& window) {
         } else {
             text.setFillColor(sf::Color::White);
         }
-        text.move(textMenuPos);
+        text.move(menuOptionOffset);
         window.draw(text);
     }
-
-
-
 }
 
 std::string MainMenu::menuOptionToString(MainMenuOptions menuOption) {
@@ -107,7 +112,7 @@ void MainMenu::loadFont() {
     }
 }
 
-bool MainMenu::isNewOptionIsOutOfBounds(int newOptionInt) {
+bool MainMenu::isNewOptionOutOfBounds(int newOptionInt) {
     if (newOptionInt < 0) {
         return true;
     }

@@ -25,8 +25,8 @@ private:
     };
 
     MainMenuOptions m_currentOption = MainMenuOptions::Play;
-    bool isNewOptionIsOutOfBounds(int newOptionInt);
-    void loadFont();
+    bool isNewOptionOutOfBounds(int newOptionInt);
+    void loadFont() override;
     std::string menuOptionToString(MainMenuOptions menuOption);
 };
 

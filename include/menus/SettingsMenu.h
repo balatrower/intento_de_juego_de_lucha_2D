@@ -12,7 +12,7 @@
 class SettingsMenu : public Menu {
 public:
     SettingsMenu();
-    std::unique_ptr<Menu> updateMenu(InputManager &inputManager, bool& userWantsExit) override;
+    std::unique_ptr<Menu> updateMenu(InputManager& inputManager, bool& userWantsExit) override;
     void drawMenu(sf::RenderWindow& window) override;
     MenuType getMenuType() override;
 private:
@@ -24,6 +24,9 @@ private:
     };
 
     SettingsMenuOptions m_currentOption = SettingsMenuOptions::Graphics;
+    bool isNewOptionOutOfBounds(int newOptionInt);
+    void loadFont() override;
+    std::string menuOptionToString(SettingsMenuOptions menuOption);
 };
 
 #endif //JUEGOPEGARSE2D_SETTINGSMENU_H

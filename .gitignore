@@ -4,4 +4,4 @@ release/
 cmake-build-*/
 out/
 **/_deps/
-fonts/
+build/fonts/

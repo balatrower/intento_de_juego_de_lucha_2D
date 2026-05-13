@@ -4,6 +4,8 @@
 
 #ifndef JUEGOPEGARSE2D_MENU_H
 #define JUEGOPEGARSE2D_MENU_H
+#include <iostream>
+
 #include "core/InputManager.h"
 #include "SFML/Graphics/Font.hpp"
 #include "SFML/Graphics/RenderWindow.hpp"
@@ -28,6 +30,7 @@ public:
     virtual void drawMenu(sf::RenderWindow& window) = 0; // define later when thinkin bout the render stuff
     virtual MenuType getMenuType() = 0;
 protected:
+    virtual void loadFont() = 0;
     sf::Font m_font;
 };
 
