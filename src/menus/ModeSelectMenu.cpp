@@ -116,4 +116,3 @@ std::string ModeSelectMenu::menuOptionToString(ModeSelectMenuOptions menuOption)
         default: return "";
     }
 }
-
