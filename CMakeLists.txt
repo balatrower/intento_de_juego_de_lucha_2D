@@ -35,6 +35,8 @@ add_executable(
         src/menus/SettingsMenu.cpp
         include/menus/SideSelectionMenu.h
         src/menus/SideSelectionMenu.cpp
+        include/core/Logger.h
+        include/core/Logger.h
 )
 
 # cambiar el path de los include en la carpeta include para los header files

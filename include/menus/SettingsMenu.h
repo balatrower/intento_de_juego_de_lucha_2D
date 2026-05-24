@@ -15,6 +15,7 @@ public:
     std::unique_ptr<Menu> updateMenu(InputManager& inputManager, bool& userWantsExit) override;
     void drawMenu(sf::RenderWindow& window) override;
     MenuType getMenuType() override;
+
 private:
     enum class SettingsMenuOptions {
         Graphics,
@@ -24,9 +25,12 @@ private:
     };
 
     SettingsMenuOptions m_currentOption = SettingsMenuOptions::Graphics;
-    bool isNewOptionOutOfBounds(int newOptionInt);
-    void loadFont() override;
     std::string menuOptionToString(SettingsMenuOptions menuOption);
+    bool isNewOptionOutOfBounds(int newOptionInt) override;
+
+    void loadFont() override;
+    void drawBackground(sf::RenderWindow &window) override;
+    void drawOptions(sf::RenderWindow &window) override;
 };
 
 #endif //JUEGOPEGARSE2D_SETTINGSMENU_H

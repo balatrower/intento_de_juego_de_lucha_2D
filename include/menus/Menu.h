@@ -27,9 +27,12 @@ class Menu {
 public:
     virtual ~Menu() = default;
     virtual std::unique_ptr<Menu> updateMenu(InputManager& inputManager, bool& userWantsExit) = 0; // = 0 means every child MUST implement this function
-    virtual void drawMenu(sf::RenderWindow& window) = 0; // define later when thinkin bout the render stuff
+    virtual void drawMenu(sf::RenderWindow& window) = 0;
     virtual MenuType getMenuType() = 0;
 protected:
+    virtual bool isNewOptionOutOfBounds(int newOptionInt) = 0;
+    virtual void drawBackground(sf::RenderWindow &window) = 0;
+    virtual void drawOptions(sf::RenderWindow &window) = 0;
     virtual void loadFont() = 0;
     sf::Font m_font;
 };

@@ -74,25 +74,49 @@ MenuType MainMenu::getMenuType() {
     return MenuType::MainMenu;
 }
 
-void MainMenu::drawMenu(sf::RenderWindow& window) {
+void MainMenu::drawBackground(sf::RenderWindow &window) {
     sf::Texture menuBackground = sf::Texture("assets/bgMainMenu.jpg");
     menuBackground.setSmooth(true);
     sf::Sprite sprMenuBackground = sf::Sprite(menuBackground);
     sprMenuBackground.setScale({(float) window.getSize().x / menuBackground.getSize().x, (float) window.getSize().y / menuBackground.getSize().y});
     window.draw(sprMenuBackground);
+}
 
+void MainMenu::drawMenu(sf::RenderWindow& window) {
+    drawBackground(window);
+    drawOptions(window);
+}
+
+void MainMenu::drawOptions(sf::RenderWindow& window) {
     sf::Text text(m_font);
-    text.setPosition({((float) window.getSize().x / 2), ((float) window.getSize().y / 2) - 100});
-    sf::Vector2f menuOptionOffset = {0.0, 100.0};
-    for (int i = 0; i < (int)MainMenuOptions::Count; i++) {
-        text.setString(menuOptionToString((MainMenuOptions)i));
-        text.setCharacterSize(24);
+    text.setCharacterSize(24);
+
+    float screenCenterX = (float) window.getSize().x / 2.f; //get center X
+    float screenCenterY = (float) window.getSize().y / 2.f; // get center Y
+
+    int totalOptions = (int)MainMenuOptions::Count;
+    float menuOptionOffset = 100.f;
+
+    // position of the first option so the whole block/list of options is centered
+    float initialPosY = screenCenterY - ((totalOptions - 1) * menuOptionOffset) / 2.f;
+
+    for (int i = 0; i < totalOptions; i++) {
+        text.setString(menuOptionToString((MainMenuOptions) i));
+
+        sf::FloatRect textBoxSize = text.getLocalBounds();
+        text.setOrigin({textBoxSize.position.x + textBoxSize.size.x / 2.f, textBoxSize.position.y + textBoxSize.size.y / 2.f});
+        // above calculation is to set the origin of the text element in the exact middle of the word so it is centered
+        //textBox or FloatRect class is a 2d rectangle align in the axis, what dat mean is like a box arround the element, hit has a position on the screen and a size
+        // position is the x and y pos of the upper left corner and size its just the width and height of the rectangle
+
+        text.setPosition({screenCenterX, initialPosY + (i * menuOptionOffset)});
+
         if ((int)m_currentOption == i) {
             text.setFillColor(sf::Color::Yellow);
         } else {
             text.setFillColor(sf::Color::White);
         }
-        text.move(menuOptionOffset);
+
         window.draw(text);
     }
 }
@@ -107,7 +131,7 @@ std::string MainMenu::menuOptionToString(MainMenuOptions menuOption) {
 }
 
 void MainMenu::loadFont() {
-    if (!m_font.openFromFile("fonts/Freedom.ttf")) {
+    if (!m_font.openFromFile("fonts/Pixellettersfull-BnJ5.ttf")) {
         std::cout << "FONT COULD NOT BE LOADED, REDIRECT THIS CONSOLE ERROR TO A LOG YOU LAZY IDIOT" << "\n";
     }
 }

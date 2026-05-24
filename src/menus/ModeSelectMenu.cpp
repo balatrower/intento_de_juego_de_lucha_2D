@@ -11,7 +11,7 @@
 
 
 ModeSelectMenu::ModeSelectMenu() {
-    loadFont();
+    ModeSelectMenu::loadFont();
 }
 
 std::unique_ptr<Menu> ModeSelectMenu::updateMenu(InputManager &inputManager, bool& userWantsExit) {
@@ -47,7 +47,7 @@ std::unique_ptr<Menu> ModeSelectMenu::updateMenu(InputManager &inputManager, boo
             case MenuAction::Enter: {
                 switch (m_currentOption) {
                     case ModeSelectMenuOptions::Versus2P: {
-                        //std::unique_ptr<Menu> newMenu = std::make_unique<>();
+                        //std::unique_ptr<Menu> newMenu = std::make_unique<SideSelectionMenu>();
                         //return std::move(newMenu);
                         return nullptr;
                     }
@@ -64,27 +64,54 @@ std::unique_ptr<Menu> ModeSelectMenu::updateMenu(InputManager &inputManager, boo
     return nullptr;
 }
 
-void ModeSelectMenu::drawMenu(sf::RenderWindow& window) {
+void ModeSelectMenu::drawBackground(sf::RenderWindow &window) {
     sf::Texture menuBackground = sf::Texture("assets/bgModeSelectionMenu.png");
-    menuBackground.setSmooth(true);
+    menuBackground.setSmooth(true); // no sawtooth basically
+
     sf::Sprite sprMenuBackground = sf::Sprite(menuBackground);
     sprMenuBackground.setScale({(float) window.getSize().x / menuBackground.getSize().x, (float) window.getSize().y / menuBackground.getSize().y});
-    window.draw(sprMenuBackground);
+    // set scale of background sprite to the entire screen size
 
+    window.draw(sprMenuBackground);
+}
+
+void ModeSelectMenu::drawOptions(sf::RenderWindow &window) {
     sf::Text text(m_font);
-    text.setPosition({((float) window.getSize().x / 2), ((float) window.getSize().y / 2) - 100});
-    sf::Vector2f menuOptionOffset = {0.0, 100.0};
-    for (int i = 0; i < (int)ModeSelectMenuOptions::Count; i++) {
+    text.setCharacterSize(24);
+
+    float screenCenterX = (float) window.getSize().x / 2.f; //get center X
+    float screenCenterY = (float) window.getSize().y / 2.f; // get center Y
+
+    int totalOptions = (int)ModeSelectMenuOptions::Count;
+    float menuOptionOffset = 100.f;
+
+    // position of the first option so the whole block/list of options is centered
+    float initialPosY = screenCenterY - ((totalOptions - 1) * menuOptionOffset) / 2.f;
+
+    for (int i = 0; i < totalOptions; i++) {
         text.setString(menuOptionToString((ModeSelectMenuOptions) i));
-        text.setCharacterSize(24);
+
+        sf::FloatRect textBoxSize = text.getLocalBounds();
+        text.setOrigin({textBoxSize.position.x + textBoxSize.size.x / 2.f, textBoxSize.position.y + textBoxSize.size.y / 2.f});
+        // above calculation is to set the origin of the text element in the exact middle of the word so it is centered
+        //textBox or FloatRect class is a 2d rectangle align in the axis, what dat mean is like a box arround the element, hit has a position on the screen and a size
+        // position is the x and y pos of the upper left corner and size its just the width and height of the rectangle
+
+        text.setPosition({screenCenterX, initialPosY + (i * menuOptionOffset)});
+
         if ((int)m_currentOption == i) {
             text.setFillColor(sf::Color::Yellow);
         } else {
             text.setFillColor(sf::Color::White);
         }
-        text.move(menuOptionOffset);
+
         window.draw(text);
     }
+}
+
+void ModeSelectMenu::drawMenu(sf::RenderWindow& window) {
+    drawBackground(window);
+    drawOptions(window);
 }
 
 MenuType ModeSelectMenu::getMenuType() {

@@ -46,8 +46,7 @@ void Game::Run() {
         }
 
         // 2. update physics, logic and menus
-            // here will be the switch with the updater for each game state
-
+        // here will be the switch with the updater for each game state
         switch (m_gameState) {
             case GameState::InMenu: {
                 std::unique_ptr<Menu> newMenu = m_currentMenu->updateMenu(inputManager, userWantsExit);

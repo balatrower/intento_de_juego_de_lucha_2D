@@ -14,6 +14,15 @@ std::unique_ptr<Menu> SettingsMenu::updateMenu(InputManager &inputManager, bool&
 }
 
 void SettingsMenu::drawMenu(sf::RenderWindow& window) {
+
+}
+
+void SettingsMenu::drawBackground(sf::RenderWindow &window) {
+
+}
+
+void SettingsMenu::drawOptions(sf::RenderWindow &window) {
+
 }
 
 MenuType SettingsMenu::getMenuType() {
@@ -25,7 +34,7 @@ bool SettingsMenu::isNewOptionOutOfBounds(int newOptionInt) {
 }
 
 void SettingsMenu::loadFont() {
-    if (!m_font.openFromFile("fonts/Freedom.ttf")) {
+    if (!m_font.openFromFile("fonts/Pixellettersfull-BnJ5.ttf")) {
         std::cout << "FONT COULD NOT BE LOADED, REDIRECT THIS CONSOLE ERROR TO A LOG YOU LAZY IDIOT" << "\n";
     }
 }

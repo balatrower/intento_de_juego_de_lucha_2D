@@ -16,6 +16,7 @@ public:
     std::unique_ptr<Menu> updateMenu(InputManager& inputManager, bool& userWantsExit) override;
     void drawMenu(sf::RenderWindow& window) override;
     MenuType getMenuType() override;
+
 private:
     enum class MainMenuOptions {
         Play,
@@ -23,11 +24,13 @@ private:
         Exit,
         Count // just to know the size of the enum
     };
-
     MainMenuOptions m_currentOption = MainMenuOptions::Play;
-    bool isNewOptionOutOfBounds(int newOptionInt);
-    void loadFont() override;
     std::string menuOptionToString(MainMenuOptions menuOption);
+    bool isNewOptionOutOfBounds(int newOptionInt);
+
+    void loadFont() override;
+    void drawBackground(sf::RenderWindow &window) override;
+    void drawOptions(sf::RenderWindow &window) override;
 };
 
 #endif //JUEGOPEGARSE2D_MAINMENU_H
