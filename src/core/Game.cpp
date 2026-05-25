@@ -3,13 +3,14 @@
 //
 
 #include "core/Game.h"
+#include "core/AudioManager.h"
 #include "core/InputManager.h"
 #include "menus/MainMenu.h"
 #include "SFML/System/Clock.hpp"
 #include "SFML/Graphics/RenderWindow.hpp"
 
 void Game::Run() {
-    m_window.create(sf::VideoMode::getDesktopMode(), "Ventana de juego", sf::Style::None, sf::State::Fullscreen);
+    m_window.create(sf::VideoMode::getDesktopMode(), "StickFighters", sf::Style::None, sf::State::Fullscreen);
 
     // frametime stuff
     sf::Clock clock; // to measure delta time
@@ -21,9 +22,15 @@ void Game::Run() {
     // asign main menu object to currentMenu and wrap it in a unique pointer for easier memory management
     m_currentMenu = std::make_unique<MainMenu>();
 
+    // audio manager
+    AudioManager audioManager = AudioManager();
+    audioManager.playBackgroundMusic(m_gameState);
+
+    bool isFullscreen = true;
+    bool userWantsExit = false;
     while (m_window.isOpen()) {
-        //0.0. boolean to use if the user wants to exit the game in a menu after getting the inputs while updating the menus
-        bool userWantsExit = false;
+        //cheeking if the state of fullscreen has changed at the start of the frame
+
 
         // 0. get delta time as sf::Time, convert it and restart the clock for next frame
         sf::Time dt = clock.restart();
@@ -49,10 +56,23 @@ void Game::Run() {
         // here will be the switch with the updater for each game state
         switch (m_gameState) {
             case GameState::InMenu: {
-                std::unique_ptr<Menu> newMenu = m_currentMenu->updateMenu(inputManager, userWantsExit);
+                //before posible changes in the update menu
+                bool previusStateOfFullscreen = isFullscreen;
+
+                std::unique_ptr<Menu> newMenu = m_currentMenu->updateMenu(inputManager, audioManager, userWantsExit, isFullscreen);
 
                 if (newMenu != nullptr) {
                     changeMenu(std::move(newMenu));
+                }
+
+                if (isFullscreen != previusStateOfFullscreen) {
+                    if (isFullscreen) {
+                        m_window.create(sf::VideoMode::getDesktopMode(), "StickFighters", sf::Style::None, sf::State::Fullscreen);
+                    } else {
+                        m_window.create(sf::VideoMode({800, 600}), "StickFighters", sf::Style::Default);
+                    }
+
+                    m_window.setFramerateLimit(60); // limiting the framerate again just in case, seen it spike to 400fps in debugging while this wasnt present
                 }
                 break;
             }
@@ -70,7 +90,7 @@ void Game::Run() {
         // 3. render the updated info on the screen
         m_window.clear(sf::Color::Black);
 
-            m_currentMenu->drawMenu(m_window);
+        m_currentMenu->drawMenu(m_window);
 
         m_window.display();
     }

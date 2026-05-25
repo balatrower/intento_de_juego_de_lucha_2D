@@ -6,16 +6,12 @@
 #define JUEGOPEGARSE2D_GAME_H
 
 #include <SFML/Graphics.hpp>
-#include "menus/Menu.h"
+#include "core/GameState.h"
+#include "Menus/Menu.h"
 
 class Game {
-    enum class GameState {
-        InMenu,
-        InMatch,
-        Count
-    };
-
 public:
+
     void Run();
     void setGameState(const GameState& gameState);
     void changeMenu(std::unique_ptr<Menu> newMenu);

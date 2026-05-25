@@ -13,7 +13,7 @@ class MainMenu : public Menu {
 
 public:
     MainMenu();
-    std::unique_ptr<Menu> updateMenu(InputManager& inputManager, bool& userWantsExit) override;
+    std::unique_ptr<Menu> updateMenu(InputManager& inputManager, AudioManager& audioManager, bool& userWantsExit, bool& isFullscreen) override;
     void drawMenu(sf::RenderWindow& window) override;
     MenuType getMenuType() override;
 
@@ -29,6 +29,12 @@ private:
     bool isNewOptionOutOfBounds(int newOptionInt);
 
     void loadFont() override;
+    void loadLogo();
+    void drawLogo(sf::RenderWindow &window);
+
+    sf::Texture m_logoTexture;
+    sf::Sprite m_logoSprite;
+
     void drawBackground(sf::RenderWindow &window) override;
     void drawOptions(sf::RenderWindow &window) override;
 };

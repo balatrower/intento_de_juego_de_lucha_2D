@@ -6,17 +6,28 @@
 #include "menus/MainMenu.h"
 #include <iostream>
 #include <memory>
+
+#include "core/Logger.h"
 #include "SFML/Graphics/Font.hpp"
 #include "SFML/Graphics/Text.hpp"
 #include "menus/ModeSelectMenu.h"
 #include "menus/SettingsMenu.h"
 #include "SFML/Graphics/Sprite.hpp"
 
-MainMenu::MainMenu() {
+MainMenu::MainMenu() : m_logoSprite(m_logoTexture) {
     loadFont();
+    loadLogo();
+
+    if (m_bgTexture.loadFromFile("assets/bgMainMenu.jpg")) {
+        m_bgTexture.setSmooth(true);
+
+        m_bgSprite.setTexture(m_bgTexture, true);
+    } else {
+        Logger::error("Texture could not be loaded correctly");
+    }
 }
 
-std::unique_ptr<Menu> MainMenu::updateMenu(InputManager& inputManager, bool& userWantsExit) {
+std::unique_ptr<Menu> MainMenu::updateMenu(InputManager& inputManager, AudioManager& audioManager, bool& userWantsExit, bool& isFullscreen) {
     while (!inputManager.isMenuActionQueueEmpty()) {
         MenuAction currentAction = inputManager.extractFirstElementOfMenuQueue();
 
@@ -75,21 +86,20 @@ MenuType MainMenu::getMenuType() {
 }
 
 void MainMenu::drawBackground(sf::RenderWindow &window) {
-    sf::Texture menuBackground = sf::Texture("assets/bgMainMenu.jpg");
-    menuBackground.setSmooth(true);
-    sf::Sprite sprMenuBackground = sf::Sprite(menuBackground);
-    sprMenuBackground.setScale({(float) window.getSize().x / menuBackground.getSize().x, (float) window.getSize().y / menuBackground.getSize().y});
-    window.draw(sprMenuBackground);
+    m_bgSprite.setScale({(float) window.getSize().x / m_bgTexture.getSize().x, (float) window.getSize().y / m_bgTexture.getSize().y});
+
+    window.draw(m_bgSprite);
 }
 
 void MainMenu::drawMenu(sf::RenderWindow& window) {
     drawBackground(window);
+    drawLogo(window);
     drawOptions(window);
 }
 
 void MainMenu::drawOptions(sf::RenderWindow& window) {
     sf::Text text(m_font);
-    text.setCharacterSize(24);
+    text.setCharacterSize(32);
 
     float screenCenterX = (float) window.getSize().x / 2.f; //get center X
     float screenCenterY = (float) window.getSize().y / 2.f; // get center Y
@@ -132,7 +142,7 @@ std::string MainMenu::menuOptionToString(MainMenuOptions menuOption) {
 
 void MainMenu::loadFont() {
     if (!m_font.openFromFile("fonts/Pixellettersfull-BnJ5.ttf")) {
-        std::cout << "FONT COULD NOT BE LOADED, REDIRECT THIS CONSOLE ERROR TO A LOG YOU LAZY IDIOT" << "\n";
+        Logger::error("Font could not be loaded");;
     }
 }
 
@@ -146,4 +156,25 @@ bool MainMenu::isNewOptionOutOfBounds(int newOptionInt) {
     }
 
     return false;
+}
+
+void MainMenu::loadLogo() {
+    if (!m_logoTexture.loadFromFile("assets/mainMenuLogo.png")) {
+        Logger::error("Main menu logo could not be loaded");
+    }
+
+    m_logoSprite.setTexture(m_logoTexture, true);
+
+    sf::FloatRect logoBox = m_logoSprite.getLocalBounds();
+    m_logoSprite.setOrigin({logoBox.position.x + logoBox.size.x / 2.f, logoBox.position.y + logoBox.size.y / 2.f});
+}
+
+void MainMenu::drawLogo(sf::RenderWindow& window) {
+    float screenCenterX = (float) window.getSize().x / 2.f;
+
+    float logoPosY = (float) window.getSize().y * 0.25f;
+
+    m_logoSprite.setPosition({screenCenterX, logoPosY});
+
+    window.draw(m_logoSprite);
 }

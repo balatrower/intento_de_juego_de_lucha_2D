@@ -38,10 +38,14 @@ add_executable(
         include/core/Logger.h
         include/core/Logger.h
         src/core/Logger.cpp
+        include/core/AudioManager.h
+        src/core/AudioManager.cpp
+        src/core/AudioManager.cpp
+        include/core/GameState.h
 )
 
 # cambiar el path de los include en la carpeta include para los header files
 target_include_directories(juegoPegarse2D PRIVATE include)
 
 # linkear libreria SFML
-target_link_libraries(juegoPegarse2D PRIVATE SFML::Graphics SFML::Window SFML::System)
+target_link_libraries(juegoPegarse2D PRIVATE SFML::Graphics SFML::Window SFML::System SFML::Audio)

@@ -5,3 +5,4 @@ cmake-build-*/
 out/
 **/_deps/
 build/fonts/
+build/music

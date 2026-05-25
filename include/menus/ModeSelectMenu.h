@@ -11,7 +11,7 @@ class ModeSelectMenu : public Menu {
 
 public:
     ModeSelectMenu();
-    std::unique_ptr<Menu> updateMenu(InputManager& inputManager, bool& userWantsExit) override;
+    std::unique_ptr<Menu> updateMenu(InputManager& inputManager, AudioManager& audioManager, bool& userWantsExit, bool& isFullscreen) override;
     void drawMenu(sf::RenderWindow& window) override;
     MenuType getMenuType() override;
 
@@ -28,6 +28,12 @@ private:
     void loadFont() override;
     void drawBackground(sf::RenderWindow &window) override;
     void drawOptions(sf::RenderWindow &window) override;
+
+    void loadLogo();
+    void drawLogo(sf::RenderWindow &window);
+
+    sf::Texture m_logoTexture;
+    sf::Sprite m_logoSprite;
 };
 
 #endif //JUEGOPEGARSE2D_MODESELECTMENU_H
